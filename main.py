@@ -4,6 +4,21 @@ from yt_dlp.utils import DownloadError
 
 app = FastAPI()
 
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:5173",  # your frontend during development
+    "https://your-frontend-domain.com",  # if you deploy later
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      # or ["*"] to allow all
+    allow_credentials=True,
+    allow_methods=["*"],        # GET, POST, etc.
+    allow_headers=["*"],        # Any headers
+)
+
 ydl_opts = {
     "quiet": True,
     "skip_download": True,
@@ -54,5 +69,6 @@ def find_8d(url_or_query: str):
                 f"https://www.youtube.com/watch?v={r['id']}"
                 for r in results[:3]
             ]
+
 
         return results_payload
